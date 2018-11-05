@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="task.sololearn.com.task">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".TaskApplication"
         android:allowBackup="true"
