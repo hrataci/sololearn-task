@@ -25,4 +25,7 @@ public interface Constants {
         String PAGES= "pages";
         String RESULTS = "results";
     }
+    interface  Date{
+        String PATTERN = "yyyy-MM-dd'T'hh:mm:ss'Z'";
+    }
 }

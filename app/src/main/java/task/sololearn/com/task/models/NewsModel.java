@@ -45,6 +45,8 @@ public class NewsModel extends RealmObject {
     @Expose
     private String pillarName;
 
+    private long publishMillis;
+
     public String getId() {
         return id;
     }
@@ -141,4 +143,11 @@ public class NewsModel extends RealmObject {
         this.pillarName = pillarName;
     }
 
+    public long getPublishMillis() {
+        return publishMillis;
+    }
+
+    public void setPublishMillis(long publishMillis) {
+        this.publishMillis = publishMillis;
+    }
 }

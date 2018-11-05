@@ -17,8 +17,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import task.sololearn.com.task.TaskApplication;
 import task.sololearn.com.task.models.NewsModel;
@@ -30,6 +34,7 @@ public class NetworkHelper {
     private static NetworkHelper helper;
     private RequestQueue requestQueue;
     private ImageLoader imageLoader;
+    private DateFormat df = new SimpleDateFormat(Constants.Date.PATTERN, Locale.US);
     private NetworkHelper() {
         requestQueue = getRequestQueue();
         imageLoader = new ImageLoader(requestQueue,
@@ -87,12 +92,16 @@ public class NetworkHelper {
                                 Gson gson = new Gson();
                                 for (int i = 0; i < results.length(); i++) {
                                     NewsModel model =  gson.fromJson(results.getString(i),NewsModel.class);
-
+                                    model.setPublishMillis(df.parse(model.getWebPublicationDate()).getTime());
                                     modelList.add(model);
                                 }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                        } catch (ParseException e) {
+
+
+
                         }
                     }
                 },
