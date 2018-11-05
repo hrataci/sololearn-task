@@ -28,13 +28,16 @@ import task.sololearn.com.task.TaskApplication;
 import task.sololearn.com.task.models.NewsModel;
 import task.sololearn.com.task.utils.Constants;
 
-import static task.sololearn.com.task.utils.Constants.JsonData.*;
+import static task.sololearn.com.task.utils.Constants.JsonData.RESULTS;
+import static task.sololearn.com.task.utils.Constants.JsonData.STATUS;
+import static task.sololearn.com.task.utils.Constants.JsonData.STATUS_OK;
 
 public class NetworkHelper {
     private static NetworkHelper helper;
     private RequestQueue requestQueue;
     private ImageLoader imageLoader;
     private DateFormat df = new SimpleDateFormat(Constants.Date.PATTERN, Locale.US);
+
     private NetworkHelper() {
         requestQueue = getRequestQueue();
         imageLoader = new ImageLoader(requestQueue,
@@ -57,12 +60,14 @@ public class NetworkHelper {
     public static synchronized void init() {
         helper = new NetworkHelper();
     }
+
     public RequestQueue getRequestQueue() {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(TaskApplication.getContext());
         }
         return requestQueue;
     }
+
     public static NetworkHelper getInst() {
         if (helper == null) {
             throw new RuntimeException("NetworkHelper is not initialized");
@@ -70,7 +75,7 @@ public class NetworkHelper {
         return helper;
     }
 
-    public ImageLoader getImageLoader(){
+    public ImageLoader getImageLoader() {
         return imageLoader;
     }
 
@@ -79,7 +84,7 @@ public class NetworkHelper {
     }
 
 
-    public void doRequest(){
+    public void doRequest() {
         addToRequestQueue(new JsonObjectRequest(Request.Method.GET, Constants.Connection.URL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -87,11 +92,11 @@ public class NetworkHelper {
                         List<NewsModel> modelList = new ArrayList<>();
                         try {
                             JSONObject responseObject = response.getJSONObject("response");
-                            if(isOk(responseObject.getString(STATUS))){
+                            if (isOk(responseObject.getString(STATUS))) {
                                 JSONArray results = responseObject.getJSONArray(RESULTS);
                                 Gson gson = new Gson();
                                 for (int i = 0; i < results.length(); i++) {
-                                    NewsModel model =  gson.fromJson(results.getString(i),NewsModel.class);
+                                    NewsModel model = gson.fromJson(results.getString(i), NewsModel.class);
                                     model.setPublishMillis(df.parse(model.getWebPublicationDate()).getTime());
                                     modelList.add(model);
                                 }
@@ -99,7 +104,6 @@ public class NetworkHelper {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } catch (ParseException e) {
-
 
 
                         }
@@ -115,11 +119,9 @@ public class NetworkHelper {
     }
 
 
-    public  boolean isOk(String status){
+    private boolean isOk(String status) {
         return STATUS_OK.equals(status);
     }
-
-
 
 
 }
