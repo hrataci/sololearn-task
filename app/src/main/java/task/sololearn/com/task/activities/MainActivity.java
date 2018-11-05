@@ -27,22 +27,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, Constants.Connection.URL, null,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                // display response
-                                Log.d("Response", response.toString());
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.d("Error.Response", error.getMessage());
-                            }
-                        }
-                );
-                NetworkHelper.getInst().addToRequestQueue(getRequest);
+                NetworkHelper.getInst().doRequest();
             }
         });
     }

@@ -16,4 +16,13 @@ public interface Constants {
     interface Timer {
         int SECONDS = 30;
     }
+    interface  JsonData{
+        String RESPONSE = "response";
+        String STATUS = "status";
+        String STATUS_OK = "ok";
+        String PAGE_SIZE = "pageSize";
+        String CURRENT_PAGE = "currentPage";
+        String PAGES= "pages";
+        String RESULTS = "results";
+    }
 }
