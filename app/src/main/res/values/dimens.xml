@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="action_open_margin_bottom">36dp</dimen>
+    <dimen name="item_offset_top_bottom">6dp</dimen>
+    <dimen name="item_offset_left_right">6dp</dimen>
+    <dimen name="favSize">32dp</dimen>
+    <dimen name="itemMargin">8dp</dimen>
+</resources>

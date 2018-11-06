@@ -8,6 +8,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class NewsModel extends RealmObject {
     @PrimaryKey
+    private int realmId;
     @SerializedName("id")
     @Expose
     private String id;
@@ -46,6 +47,7 @@ public class NewsModel extends RealmObject {
     private String pillarName;
 
     private long publishMillis;
+    private boolean isPinned;
 
     public String getId() {
         return id;
@@ -149,5 +151,36 @@ public class NewsModel extends RealmObject {
 
     public void setPublishMillis(long publishMillis) {
         this.publishMillis = publishMillis;
+    }
+
+    public int getRealmId() {
+        return realmId;
+    }
+
+    public void setRealmId() {
+        this.realmId = id.hashCode();
+    }
+
+    public boolean isPinned() {
+        return isPinned;
+    }
+
+    public void setPinned(boolean pinned) {
+        isPinned = pinned;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NewsModel newsModel = (NewsModel) o;
+
+        return id != null ? id.equals(newsModel.id) : newsModel.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

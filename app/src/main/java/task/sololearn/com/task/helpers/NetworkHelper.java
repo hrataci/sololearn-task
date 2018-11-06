@@ -24,10 +24,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import task.sololearn.com.task.TaskApplication;
 import task.sololearn.com.task.models.NewsModel;
 import task.sololearn.com.task.utils.Constants;
 
+import static task.sololearn.com.task.utils.Constants.Connection.PAGE;
+import static task.sololearn.com.task.utils.Constants.Connection.URL;
+import static task.sololearn.com.task.utils.Constants.JsonData.CURRENT_PAGE;
+import static task.sololearn.com.task.utils.Constants.JsonData.PAGE_SIZE;
+import static task.sololearn.com.task.utils.Constants.JsonData.RESPONSE;
 import static task.sololearn.com.task.utils.Constants.JsonData.RESULTS;
 import static task.sololearn.com.task.utils.Constants.JsonData.STATUS;
 import static task.sololearn.com.task.utils.Constants.JsonData.STATUS_OK;
@@ -37,9 +44,13 @@ public class NetworkHelper {
     private RequestQueue requestQueue;
     private ImageLoader imageLoader;
     private DateFormat df = new SimpleDateFormat(Constants.Date.PATTERN, Locale.US);
+    private int page = 1;
 
     private NetworkHelper() {
         requestQueue = getRequestQueue();
+        RealmResults<NewsModel> realmResults = Realm.getDefaultInstance().where(NewsModel.class).findAll();
+        if (realmResults.size() > 0)
+            page = realmResults.size() / PAGE_SIZE;
         imageLoader = new ImageLoader(requestQueue,
                 new ImageLoader.ImageCache() {
                     private final LruCache<String, Bitmap>
@@ -84,29 +95,45 @@ public class NetworkHelper {
     }
 
 
-    public void doRequest() {
-        addToRequestQueue(new JsonObjectRequest(Request.Method.GET, Constants.Connection.URL, null,
+    public void doRequest(final boolean usePagination) {
+        String url = null;
+        if (usePagination) {
+            url = URL + PAGE + page;
+        } else {
+            url = URL;
+        }
+        addToRequestQueue(new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        List<NewsModel> modelList = new ArrayList<>();
+                        final List<NewsModel> modelList = new ArrayList<>();
                         try {
-                            JSONObject responseObject = response.getJSONObject("response");
+                            JSONObject responseObject = response.getJSONObject(RESPONSE);
                             if (isOk(responseObject.getString(STATUS))) {
+                                if (usePagination)
+                                    page = responseObject.getInt(CURRENT_PAGE) + 1;
                                 JSONArray results = responseObject.getJSONArray(RESULTS);
                                 Gson gson = new Gson();
                                 for (int i = 0; i < results.length(); i++) {
                                     NewsModel model = gson.fromJson(results.getString(i), NewsModel.class);
-                                    model.setPublishMillis(df.parse(model.getWebPublicationDate()).getTime());
-                                    modelList.add(model);
+                                    try {
+                                        model.setPublishMillis(df.parse(model.getWebPublicationDate()).getTime());
+                                        model.setRealmId();
+                                        modelList.add(model);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        } catch (ParseException e) {
-
-
                         }
+                        Realm.getDefaultInstance().executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                realm.insertOrUpdate(modelList);
+                            }
+                        });
                     }
                 },
                 new Response.ErrorListener() {

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/imgNews"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:adjustViewBounds="false"
+        android:foregroundGravity="bottom"
+        android:gravity="bottom"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/actionFav"
+
+        android:layout_width="@dimen/favSize"
+        android:layout_height="@dimen/favSize"
+        android:layout_marginBottom="@dimen/itemMargin"
+        android:layout_marginEnd="@dimen/itemMargin"
+        android:layout_marginRight="@dimen/itemMargin"
+        android:src="@drawable/icon_fav"
+        app:layout_constraintBottom_toBottomOf="@+id/imgNews"
+        app:layout_constraintEnd_toEndOf="@+id/imgNews"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="@+id/imgNews"
+        app:layout_constraintTop_toTopOf="@+id/imgNews"
+        app:layout_constraintVertical_bias="0.06999999" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/lblNewsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/itemMargin"
+        android:layout_marginRight= "@dimen/itemMargin"
+        android:layout_marginTop="@dimen/itemMargin"
+        android:layout_marginEnd="@dimen/itemMargin"
+        android:text="Title"
+        android:textStyle="bold"
+        android:lines="1"
+        app:layout_constraintBottom_toTopOf="@+id/lblAuthor"
+        app:layout_constraintEnd_toEndOf="@+id/imgNews"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/lblAuthor"
+        app:layout_constraintTop_toTopOf="@+id/imgNews"
+        app:layout_constraintVertical_bias="1.0"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/lblAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/itemMargin"
+        android:text="Author"
+        app:layout_constraintBottom_toBottomOf="@+id/imgNews"
+        app:layout_constraintEnd_toEndOf="@+id/imgNews"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imgNews"
+        app:layout_constraintVertical_bias="0.8"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+
+
+
+</android.support.constraint.ConstraintLayout>
