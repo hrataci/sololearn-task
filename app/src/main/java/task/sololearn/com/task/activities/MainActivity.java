@@ -110,6 +110,8 @@ public class MainActivity extends BaseActivity {
         }
         lastAddedPosition += count;
         adapter.notifyDataSetChanged();
+
+        recyclerView.smoothScrollBy(0,300);
     }
 
     @Override
@@ -127,7 +129,7 @@ public class MainActivity extends BaseActivity {
 
 
     private void scrollToUp() {
-        recyclerView.scrollToPosition(0);
+        recyclerView.smoothScrollToPosition(0);
         //todo add from Top
 
     }

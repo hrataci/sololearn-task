@@ -34,39 +34,34 @@
         app:layout_constraintStart_toStartOf="@+id/imgNews"
         app:layout_constraintTop_toTopOf="@+id/imgNews"
         app:layout_constraintVertical_bias="0.06999999" />
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/lblNewsTitle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/itemMargin"
-        android:layout_marginRight= "@dimen/itemMargin"
-        android:layout_marginTop="@dimen/itemMargin"
-        android:layout_marginEnd="@dimen/itemMargin"
-        android:text="Title"
-        android:textStyle="bold"
-        android:lines="1"
-        app:layout_constraintBottom_toTopOf="@+id/lblAuthor"
-        app:layout_constraintEnd_toEndOf="@+id/imgNews"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/lblAuthor"
-        app:layout_constraintTop_toTopOf="@+id/imgNews"
-        app:layout_constraintVertical_bias="1.0"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/lblAuthor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/itemMargin"
-        android:text="Author"
+        android:orientation="vertical"
+        android:padding="@dimen/itemMargin"
+        android:background="@color/textBackgroundColor"
         app:layout_constraintBottom_toBottomOf="@+id/imgNews"
         app:layout_constraintEnd_toEndOf="@+id/imgNews"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imgNews"
-        app:layout_constraintVertical_bias="0.8"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+        app:layout_constraintHorizontal_bias="0.0">
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/lblNewsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textStyle="bold"
+            android:lines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/lblAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Author"
+            app:layout_constraintBottom_toBottomOf="@+id/imgNews"
+            app:layout_constraintEnd_toEndOf="@+id/imgNews"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+
+    </LinearLayout>
 
 
 

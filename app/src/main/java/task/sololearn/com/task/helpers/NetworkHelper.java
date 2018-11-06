@@ -29,6 +29,7 @@ import io.realm.RealmResults;
 import task.sololearn.com.task.TaskApplication;
 import task.sololearn.com.task.models.NewsModel;
 import task.sololearn.com.task.utils.Constants;
+import task.sololearn.com.task.utils.PrefManager;
 
 import static task.sololearn.com.task.utils.Constants.Connection.PAGE;
 import static task.sololearn.com.task.utils.Constants.Connection.URL;
@@ -45,12 +46,14 @@ public class NetworkHelper {
     private ImageLoader imageLoader;
     private DateFormat df = new SimpleDateFormat(Constants.Date.PATTERN, Locale.US);
     private int page = 1;
+    private int realmSize;
 
     private NetworkHelper() {
         requestQueue = getRequestQueue();
         RealmResults<NewsModel> realmResults = Realm.getDefaultInstance().where(NewsModel.class).findAll();
-        if (realmResults.size() > 0)
-            page = realmResults.size() / PAGE_SIZE;
+        realmSize = realmResults.size();
+        if (realmSize > 0)
+            page = realmSize / PAGE_SIZE;
         imageLoader = new ImageLoader(requestQueue,
                 new ImageLoader.ImageCache() {
                     private final LruCache<String, Bitmap>
@@ -106,34 +109,7 @@ public class NetworkHelper {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        final List<NewsModel> modelList = new ArrayList<>();
-                        try {
-                            JSONObject responseObject = response.getJSONObject(RESPONSE);
-                            if (isOk(responseObject.getString(STATUS))) {
-                                if (usePagination)
-                                    page = responseObject.getInt(CURRENT_PAGE) + 1;
-                                JSONArray results = responseObject.getJSONArray(RESULTS);
-                                Gson gson = new Gson();
-                                for (int i = 0; i < results.length(); i++) {
-                                    NewsModel model = gson.fromJson(results.getString(i), NewsModel.class);
-                                    try {
-                                        model.setPublishMillis(df.parse(model.getWebPublicationDate()).getTime());
-                                        model.setRealmId();
-                                        modelList.add(model);
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        Realm.getDefaultInstance().executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                realm.insertOrUpdate(modelList);
-                            }
-                        });
+                        handleResponse(response, usePagination);
                     }
                 },
                 new Response.ErrorListener() {
@@ -143,6 +119,49 @@ public class NetworkHelper {
                     }
                 }
         ));
+    }
+
+    private void handleResponse(JSONObject response, final boolean usePagination) {
+
+        final List<NewsModel> modelList = new ArrayList<>();
+        try {
+            JSONObject responseObject = response.getJSONObject(RESPONSE);
+            if (isOk(responseObject.getString(STATUS))) {
+                if (usePagination)
+                    page = responseObject.getInt(CURRENT_PAGE) + 1;
+                JSONArray results = responseObject.getJSONArray(RESULTS);
+                Gson gson = new Gson();
+                for (int i = 0; i < results.length(); i++) {
+                    NewsModel model = gson.fromJson(results.getString(i), NewsModel.class);
+                    try {
+                        model.setPublishMillis(df.parse(model.getWebPublicationDate()).getTime());
+                        model.setRealmId();
+                        modelList.add(model);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Realm.getDefaultInstance().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.insertOrUpdate(modelList);
+                RealmResults<NewsModel> realmResults = realm.where(NewsModel.class).findAll();
+                if (realmSize != realmResults.size()) {
+                    realmSize = realmResults.size();
+                    if (PrefManager.getInstance().isBackgrounded()) {
+                        NotificationHelper.notify(TaskApplication.getContext());
+                    }
+                    if (!usePagination) {
+                        page = realmSize / PAGE_SIZE;
+                    }
+                }
+            }
+        });
+
     }
 
 

@@ -27,7 +27,7 @@ public class NotificationHelper {
     private static Notification getNotification(Context ctx) {
         Resources resources = ctx.getResources();
         Notification n = buildBasicNotification(makeNotificationBuilder(ctx), ctx, resources.getString(R.string.notification_header),
-                resources.getString(R.string.notification_header));
+                resources.getString(R.string.notification_body));
         n.sound = Uri.parse("content://settings/system/notification_sound");
         return n;
     }
