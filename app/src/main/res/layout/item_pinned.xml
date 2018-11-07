@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relativeLayout"
+    android:layout_width="180dp"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/imgNews"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:adjustViewBounds="false"
+        android:foregroundGravity="bottom"
+        android:gravity="bottom"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/textBackgroundColor"
+        android:orientation="vertical"
+        android:padding="@dimen/itemMargin"
+        app:layout_constraintBottom_toBottomOf="@+id/imgNews"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/lblNewsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:text="Title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/lblAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+
+            android:text="Author"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            app:layout_constraintBottom_toBottomOf="@+id/imgNews"
+            app:layout_constraintEnd_toEndOf="@+id/imgNews" />
+
+    </LinearLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>

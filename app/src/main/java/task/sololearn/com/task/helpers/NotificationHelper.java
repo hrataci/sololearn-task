@@ -12,7 +12,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
 import task.sololearn.com.task.R;
-import task.sololearn.com.task.activities.MainActivity;
+import task.sololearn.com.task.activities.NewsFeedActivity;
 import task.sololearn.com.task.utils.NotificationID;
 
 public class NotificationHelper {
@@ -53,7 +53,7 @@ public class NotificationHelper {
 
     private static Notification buildBasicNotification(NotificationCompat.Builder notificationBuilder,
                                                        Context context, String title, String summaryText ) {
-        PendingIntent clickIntent = MainActivity.notificationClickIntent(context);
+        PendingIntent clickIntent = NewsFeedActivity.notificationClickIntent(context);
         notificationBuilder.setContentTitle(title);
         notificationBuilder.setContentText(summaryText);
         notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);

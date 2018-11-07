@@ -1,6 +1,7 @@
 package task.sololearn.com.task.activities;
 
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,9 +25,9 @@ import task.sololearn.com.task.widgets.swipyrefreshlayout.SwipyRefreshLayoutDire
 
 import static task.sololearn.com.task.utils.Constants.JsonData.PAGE_SIZE;
 
-public class MainActivity extends BaseActivity {
+public class NewsFeedActivity extends BaseActivity {
     private RecyclerView recyclerView;
-    private Realm realm;
+
     private NewsFeedAdapter adapter;
     private List<NewsModel> data = new ArrayList<>();
     private RealmResults<NewsModel> realmResults;
@@ -65,7 +66,7 @@ public class MainActivity extends BaseActivity {
         recyclerView = findViewById(R.id.recyclerViewMain);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        realm = Realm.getDefaultInstance();
+
         realmResults = realm.where(NewsModel.class).sort("publishMillis", Sort.DESCENDING).findAll();
         realmResults.addChangeListener(new RealmChangeListener<RealmResults<NewsModel>>() {
             @Override
@@ -119,7 +120,6 @@ public class MainActivity extends BaseActivity {
         super.onDestroy();
         recyclerView.setAdapter(null);
         realmResults.removeAllChangeListeners();
-        realm.close();
     }
 
     private void refreshFrom() {
@@ -130,12 +130,10 @@ public class MainActivity extends BaseActivity {
 
     private void scrollToUp() {
         recyclerView.smoothScrollToPosition(0);
-        //todo add from Top
-
     }
 
     public static PendingIntent notificationClickIntent(Context context) {
-        Intent notificationIntent = new Intent(context, MainActivity.class);
+        Intent notificationIntent = new Intent(context, NewsFeedActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent intent = PendingIntent.getActivity(context, 0,

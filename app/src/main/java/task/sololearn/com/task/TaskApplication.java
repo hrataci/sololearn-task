@@ -13,6 +13,7 @@ import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import task.sololearn.com.task.helpers.NetworkHelper;
 import task.sololearn.com.task.services.TimerJobService;
 import task.sololearn.com.task.utils.AppLifecycleObserver;
@@ -32,6 +33,11 @@ public class TaskApplication extends Application implements LifecycleObserver {
     private void init() {
         appContext = this;
         Realm.init(this);
+        RealmConfiguration configuration = new RealmConfiguration.Builder()
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(configuration);
         PrefManager.init(this);
         NetworkHelper.init();
         dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));

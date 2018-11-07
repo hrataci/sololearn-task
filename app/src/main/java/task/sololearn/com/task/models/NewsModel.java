@@ -47,7 +47,6 @@ public class NewsModel extends RealmObject {
     private String pillarName;
 
     private long publishMillis;
-    private boolean isPinned;
 
     public String getId() {
         return id;
@@ -161,13 +160,7 @@ public class NewsModel extends RealmObject {
         this.realmId = id.hashCode();
     }
 
-    public boolean isPinned() {
-        return isPinned;
-    }
 
-    public void setPinned(boolean pinned) {
-        isPinned = pinned;
-    }
 
     @Override
     public boolean equals(Object o) {
